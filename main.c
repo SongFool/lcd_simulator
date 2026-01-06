@@ -3,9 +3,12 @@
 #include "win_lcd.h"
 #include "lcd.h"
 #include "lcd_conf.h"
-
+#include "stdio.h"
+#include "tty.h"
+#include "win_key.h"
 static HWND g_hwnd;
-
+tty_t tty;
+win_key key;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM w, LPARAM l)
 {
     switch (msg)
@@ -18,7 +21,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM w, LPARAM l)
         EndPaint(hwnd, &ps);
     }
     break;
-
+    case WM_CHAR:
+    {
+        char ch = (char)w;
+        win_key_isr(&key,ch);
+    }
+    break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -83,7 +91,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdSh
         0,
         NULL
     );
-
+    tty_init(&tty);
+    win_key_init(&key,tty_rx_callback,&tty);
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
     {

@@ -7,13 +7,18 @@ TARGET  := lcd_sim.exe
 CC = E:/Mingw/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/bin/gcc.exe
 CFLAGS  := -Wall -O2 -std=c99 \
 			-Iwin \
-			-Ilcd
+			-Ilcd \
+			-Itty \
+			-Ilib
 LDFLAGS := -lgdi32 -luser32
 
 SRCS := \
     main.c \
     win/win_lcd.c \
-    lcd/lcd.c
+	win/win_key.c \
+    lcd/lcd.c \
+	lib/fifo.c \
+	tty/tty.c
 
 OBJS := $(SRCS:.c=.o)
 
