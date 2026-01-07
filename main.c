@@ -3,9 +3,11 @@
 #include "win_lcd.h"
 #include "lcd.h"
 #include "lcd_conf.h"
+#include "gui.h"
 #include "stdio.h"
 #include "tty.h"
 #include "win_key.h"
+
 static HWND g_hwnd;
 tty_t tty;
 win_key key;
@@ -37,20 +39,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM w, LPARAM l)
 DWORD WINAPI gui_thread(LPVOID param)
 {
     HWND hwnd = (HWND)param;
-
-    lcd_clear(0x202020);
-
-    int x = 0;
-
+        //lcd_clear(0x202020);
+    gui_init(0,0xFF0000,0x202020,0);
+    //gui_draw_line(10,0,100);
     while (1)
     {
-        /* 模拟 MCU GUI 刷新 */
-        lcd_draw_pixel(10 + x, 20, 0xFF0000);
-        lcd_draw_pixel(10, 20 + x, 0x00FF00);
+        // /* 模拟 MCU GUI 刷新 */
+        // lcd_draw_pixel(10 + x, 20, 0xFF0000);
+        // lcd_draw_pixel(10, 20 + x, 0x00FF00);
 
-        x = (x + 1) % 200;
+        // x = (x + 1) % 200;
 
-        /* 请求刷新窗口（注意：不是直接画） */
+        // /* 请求刷新窗口（注意：不是直接画） */
+        tty_display(&tty);
         InvalidateRect(hwnd, NULL, FALSE);
 
         Sleep(16);   // ~60Hz，≈ SysTick
@@ -74,8 +75,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdSh
         "MCU LCD Simulator",
         WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME,
         100, 100,
-        600,
-        450,
+        LCD_WIDTH + 100,
+        LCD_HEIGHT + 80,
         NULL, NULL, hInst, NULL
     );
 

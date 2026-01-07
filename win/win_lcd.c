@@ -29,7 +29,7 @@ void win_lcd_flush(HDC hdc)
 {
     StretchDIBits(
         hdc,
-        0, 0, LCD_WIDTH, LCD_HEIGHT,
+        40, 20, LCD_WIDTH, LCD_HEIGHT,
         0, 0, LCD_WIDTH, LCD_HEIGHT,
         lcd_fb,
         &bmi,

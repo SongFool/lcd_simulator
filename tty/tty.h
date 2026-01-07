@@ -12,3 +12,4 @@ void tty_init(tty_t *tty);
 void tty_rx_char(tty_t *tty, char c);
 int tty_read(tty_t *tty,char *c);
 void tty_rx_callback(void *ctx, char c);
+void tty_display(tty_t *tty);
